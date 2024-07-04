@@ -400,33 +400,33 @@ function combineImpairments(impairments) {
 
 document.getElementById('calculatorForm').addEventListener('submit', function(event) {
     event.preventDefault();
-    const dipFlexion = parseFloat(document.getElementById('DIPFlexion').value) || 0;
-    const dipExtension = parseFloat(document.getElementById('DIPExtension').value) || 0;
-    const dipAnkylosis = parseFloat(document.getElementById('DIPAnkylosis').value) || 0;
-    const pipFlexion = parseFloat(document.getElementById('PIPFlexion').value) || 0;
-    const pipExtension = parseFloat(document.getElementById('PIPExtension').value) || 0;
-    const pipAnkylosis = parseFloat(document.getElementById('PIPAnkylosis').value) || 0;
-    const mpFlexion = parseFloat(document.getElementById('MPFlexion').value) || 0;
-    const mpExtension = parseFloat(document.getElementById('MPExtension').value) || 0;
-    const mpAnkylosis = parseFloat(document.getElementById('MPAnkylosis').value) || 0;
+    const dipFlexion = document.getElementById('DIPFlexion').value;
+    const dipExtension = document.getElementById('DIPExtension').value;
+    const dipAnkylosis = document.getElementById('DIPAnkylosis').value;
+    const pipFlexion = document.getElementById('PIPFlexion').value;
+    const pipExtension = document.getElementById('PIPExtension').value;
+    const pipAnkylosis = document.getElementById('PIPAnkylosis').value;
+    const mpFlexion = document.getElementById('MPFlexion').value;
+    const mpExtension = document.getElementById('MPExtension').value;
+    const mpAnkylosis = document.getElementById('MPAnkylosis').value;
 
     const dipImpairments = [
-        lookupDTImpairment(dipFlexion, 'DIP', 'flexion'),
-        lookupDTImpairment(dipExtension, 'DIP', 'extension'),
-        lookupDTImpairment(dipAnkylosis, 'DIP', 'ankylosis')
-    ].filter(imp => imp > 0);
+        dipFlexion && lookupDTImpairment(parseFloat(dipFlexion), 'DIP', 'flexion'),
+        dipExtension && lookupDTImpairment(parseFloat(dipExtension), 'DIP', 'extension'),
+        dipAnkylosis && lookupDTImpairment(parseFloat(dipAnkylosis), 'DIP', 'ankylosis')
+    ].filter(imp => imp);
 
     const pipImpairments = [
-        lookupDTImpairment(pipFlexion, 'PIP', 'flexion'),
-        lookupDTImpairment(pipExtension, 'PIP', 'extension'),
-        lookupDTImpairment(pipAnkylosis, 'PIP', 'ankylosis')
-    ].filter(imp => imp > 0);
+        pipFlexion && lookupDTImpairment(parseFloat(pipFlexion), 'PIP', 'flexion'),
+        pipExtension && lookupDTImpairment(parseFloat(pipExtension), 'PIP', 'extension'),
+        pipAnkylosis && lookupDTImpairment(parseFloat(pipAnkylosis), 'PIP', 'ankylosis')
+    ].filter(imp => imp);
 
     const mpImpairments = [
-        lookupDTImpairment(mpFlexion, 'MP', 'flexion'),
-        lookupDTImpairment(mpExtension, 'MP', 'extension'),
-        lookupDTImpairment(mpAnkylosis, 'MP', 'ankylosis')
-    ].filter(imp => imp > 0);
+        mpFlexion && lookupDTImpairment(parseFloat(mpFlexion), 'MP', 'flexion'),
+        mpExtension && lookupDTImpairment(parseFloat(mpExtension), 'MP', 'extension'),
+        mpAnkylosis && lookupDTImpairment(parseFloat(mpAnkylosis), 'MP', 'ankylosis')
+    ].filter(imp => imp);
 
     const dipImpairment = combineImpairments(dipImpairments);
     const pipImpairment = combineImpairments(pipImpairments);
