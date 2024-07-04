@@ -442,10 +442,41 @@ document.getElementById('calculatorForm').addEventListener('submit', function(ev
     const totalImpairments = [pipImpairment, mpImpairment, dipImpairment].sort((a, b) => b - a); // Sort from highest to lowest
     const totalImpairment = combineImpairments(totalImpairments);
 
-    document.getElementById('result').textContent = `
-        DIP Impairment: ${dipImpairment}% 
-        PIP Impairment: ${pipImpairment}% 
-        MP Impairment: ${mpImpairment}% 
-        Combined Impairment: ${totalImpairment}%
+    document.getElementById('result').innerHTML = `
+        <table>
+            <thead>
+                <tr>
+                    <th>Joint</th>
+                    <th>Flexion</th>
+                    <th>Extension</th>
+                    <th>Ankylosis</th>
+                    <th>Total Joint Impairment</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>DIP</td>
+                    <td>${dipImpairments[0] !== undefined ? dipImpairments[0] : 0}%</td>
+                    <td>${dipImpairments[1] !== undefined ? dipImpairments[1] : 0}%</td>
+                    <td>${dipImpairments[2] !== undefined ? dipImpairments[2] : 0}%</td>
+                    <td>${dipImpairment}%</td>
+                </tr>
+                <tr>
+                    <td>PIP</td>
+                    <td>${pipImpairments[0] !== undefined ? pipImpairments[0] : 0}%</td>
+                    <td>${pipImpairments[1] !== undefined ? pipImpairments[1] : 0}%</td>
+                    <td>${pipImpairments[2] !== undefined ? pipImpairments[2] : 0}%</td>
+                    <td>${pipImpairment}%</td>
+                </tr>
+                <tr>
+                    <td>MP</td>
+                    <td>${mpImpairments[0] !== undefined ? mpImpairments[0] : 0}%</td>
+                    <td>${mpImpairments[1] !== undefined ? mpImpairments[1] : 0}%</td>
+                    <td>${mpImpairments[2] !== undefined ? mpImpairments[2] : 0}%</td>
+                    <td>${mpImpairment}%</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>Combined Impairment: ${totalImpairment}%</p>
     `;
 });
