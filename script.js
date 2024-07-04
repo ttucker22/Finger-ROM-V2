@@ -359,7 +359,6 @@ const MPData = [
     { flexion: '>90', dtFlexion: 0, extension: '>20', dtExtension: 0, ankylosis: '>90', dtAnkylosis: 100 }
 ];
 
-
 function lookupDTImpairment(angle, jointType, motionType) {
     let data;
     if (jointType === 'DIP') {
@@ -437,7 +436,8 @@ document.getElementById('calculatorForm').addEventListener('submit', function(ev
     const pipImpairment = addImpairments(pipImpairments);
     const mpImpairment = addImpairments(mpImpairments);
 
-    const totalImpairment = combineImpairments([dipImpairment, pipImpairment, mpImpairment]);
+    const totalImpairments = [dipImpairment, pipImpairment, mpImpairment].sort((a, b) => b - a); // Sort from highest to lowest
+    const totalImpairment = combineImpairments(totalImpairments);
 
     document.getElementById('result').textContent = `
         DIP Impairment: ${dipImpairment}% 
