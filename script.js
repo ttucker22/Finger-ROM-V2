@@ -360,6 +360,7 @@ const MPData = [
 ];
 
 function lookupDTImpairment(angle, jointType, motionType) {
+    console.log(`lookupDTImpairment called with angle: ${angle}, jointType: ${jointType}, motionType: ${motionType}`);
     let data;
     if (jointType === 'DIP') {
         data = DIPData;
@@ -390,21 +391,27 @@ function lookupDTImpairment(angle, jointType, motionType) {
         throw new Error('Angle out of range');
     }
 
+    console.log(`lookupDTImpairment result: ${dtImpairment}`);
     return dtImpairment;
 }
 
 function combineImpairments(impairments) {
+    console.log(`combineImpairments called with impairments: ${impairments}`);
     let combined = 0;
     let combinedSteps = [];
     impairments.forEach(imp => {
         combined = Math.round((combined + (imp / 100) * (1 - combined)) * 100) / 100;
         combinedSteps.push(imp);
     });
+    console.log(`combineImpairments result: ${combined}`);
     return { combined: Math.round(combined * 100), combinedSteps }; // Convert to percentage and round to nearest whole number
 }
 
 function addImpairments(impairments) {
-    return impairments.reduce((acc, imp) => acc + imp, 0);
+    console.log(`addImpairments called with impairments: ${impairments}`);
+    const result = impairments.reduce((acc, imp) => acc + imp, 0);
+    console.log(`addImpairments result: ${result}`);
+    return result;
 }
 
 document.getElementById('calculatorForm').addEventListener('submit', function(event) {
@@ -420,6 +427,8 @@ document.getElementById('calculatorForm').addEventListener('submit', function(ev
         const mpFlexion = document.getElementById('MPFlexion').value;
         const mpExtension = document.getElementById('MPExtension').value;
         const mpAnkylosis = document.getElementById('MPAnkylosis').value;
+
+        console.log(`Input values: DIPFlexion: ${dipFlexion}, DIPExtension: ${dipExtension}, DIPAnkylosis: ${dipAnkylosis}, PIPFlexion: ${pipFlexion}, PIPExtension: ${pipExtension}, PIPAnkylosis: ${pipAnkylosis}, MPFlexion: ${mpFlexion}, MPExtension: ${mpExtension}, MPAnkylosis: ${mpAnkylosis}`);
 
         const dipImpairments = [
             dipFlexion ? lookupDTImpairment(parseFloat(dipFlexion), 'DIP', 'flexion') : 0,
@@ -438,6 +447,8 @@ document.getElementById('calculatorForm').addEventListener('submit', function(ev
             mpExtension ? lookupDTImpairment(parseFloat(mpExtension), 'MP', 'extension') : 0,
             mpAnkylosis ? lookupDTImpairment(parseFloat(mpAnkylosis), 'MP', 'ankylosis') : 0
         ].filter(imp => imp);
+
+        console.log(`Impairments: DIP: ${dipImpairments}, PIP: ${pipImpairments}, MP: ${mpImpairments}`);
 
         const dipImpairment = addImpairments(dipImpairments);
         const pipImpairment = addImpairments(pipImpairments);
@@ -462,6 +473,9 @@ document.getElementById('calculatorForm').addEventListener('submit', function(ev
         document.getElementById('MPTotalImpairment').textContent = mpImpairment;
 
         const combinedStepsText = combinedSteps.map(step => `${step} C`).join(' ').slice(0, -1);
+
+        console.log(`Combined Steps Text: ${combinedStepsText}`);
+        console.log(`Total Impairment: ${totalImpairment}`);
 
         document.getElementById('result').innerHTML = `
             <p>Combined Impairment: ${combinedStepsText} = ${totalImpairment} DT</p>
