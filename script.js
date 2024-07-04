@@ -360,7 +360,6 @@ const MPData = [
 ];
 
 function lookupDTImpairment(angle, jointType, motionType) {
-    console.log(`lookupDTImpairment called with angle: ${angle}, jointType: ${jointType}, motionType: ${motionType}`);
     let data;
     if (jointType === 'DIP') {
         data = DIPData;
@@ -391,100 +390,78 @@ function lookupDTImpairment(angle, jointType, motionType) {
         throw new Error('Angle out of range');
     }
 
-    console.log(`lookupDTImpairment result: ${dtImpairment}`);
     return dtImpairment;
 }
 
 function combineImpairments(impairments) {
-    console.log(`combineImpairments called with impairments: ${impairments}`);
     let combined = 0;
     let combinedSteps = [];
     impairments.forEach(imp => {
         combined = Math.round((combined + (imp / 100) * (1 - combined)) * 100) / 100;
         combinedSteps.push(imp);
     });
-    console.log(`combineImpairments result: ${combined}`);
     return { combined: Math.round(combined * 100), combinedSteps }; // Convert to percentage and round to nearest whole number
 }
 
 function addImpairments(impairments) {
-    console.log(`addImpairments called with impairments: ${impairments}`);
-    const result = impairments.reduce((acc, imp) => acc + imp, 0);
-    console.log(`addImpairments result: ${result}`);
-    return result;
+    return impairments.reduce((acc, imp) => acc + imp, 0);
 }
 
 document.getElementById('calculatorForm').addEventListener('submit', function(event) {
     event.preventDefault();
+    const dipFlexion = document.getElementById('DIPFlexion').value;
+    const dipExtension = document.getElementById('DIPExtension').value;
+    const dipAnkylosis = document.getElementById('DIPAnkylosis').value;
+    const pipFlexion = document.getElementById('PIPFlexion').value;
+    const pipExtension = document.getElementById('PIPExtension').value;
+    const pipAnkylosis = document.getElementById('PIPAnkylosis').value;
+    const mpFlexion = document.getElementById('MPFlexion').value;
+    const mpExtension = document.getElementById('MPExtension').value;
+    const mpAnkylosis = document.getElementById('MPAnkylosis').value;
 
-    try {
-        const dipFlexion = document.getElementById('DIPFlexion').value;
-        const dipExtension = document.getElementById('DIPExtension').value;
-        const dipAnkylosis = document.getElementById('DIPAnkylosis').value;
-        const pipFlexion = document.getElementById('PIPFlexion').value;
-        const pipExtension = document.getElementById('PIPExtension').value;
-        const pipAnkylosis = document.getElementById('PIPAnkylosis').value;
-        const mpFlexion = document.getElementById('MPFlexion').value;
-        const mpExtension = document.getElementById('MPExtension').value;
-        const mpAnkylosis = document.getElementById('MPAnkylosis').value;
+    const dipImpairments = [
+        dipFlexion && lookupDTImpairment(parseFloat(dipFlexion), 'DIP', 'flexion'),
+        dipExtension && lookupDTImpairment(parseFloat(dipExtension), 'DIP', 'extension'),
+        dipAnkylosis && lookupDTImpairment(parseFloat(dipAnkylosis), 'DIP', 'ankylosis')
+    ].filter(imp => imp);
 
-        console.log(`Input values: DIPFlexion: ${dipFlexion}, DIPExtension: ${dipExtension}, DIPAnkylosis: ${dipAnkylosis}, PIPFlexion: ${pipFlexion}, PIPExtension: ${pipExtension}, PIPAnkylosis: ${pipAnkylosis}, MPFlexion: ${mpFlexion}, MPExtension: ${mpExtension}, MPAnkylosis: ${mpAnkylosis}`);
+    const pipImpairments = [
+        pipFlexion && lookupDTImpairment(parseFloat(pipFlexion), 'PIP', 'flexion'),
+        pipExtension && lookupDTImpairment(parseFloat(pipExtension), 'PIP', 'extension'),
+        pipAnkylosis && lookupDTImpairment(parseFloat(pipAnkylosis), 'PIP', 'ankylosis')
+    ].filter(imp => imp);
 
-        const dipImpairments = [
-            dipFlexion ? lookupDTImpairment(parseFloat(dipFlexion), 'DIP', 'flexion') : 0,
-            dipExtension ? lookupDTImpairment(parseFloat(dipExtension), 'DIP', 'extension') : 0,
-            dipAnkylosis ? lookupDTImpairment(parseFloat(dipAnkylosis), 'DIP', 'ankylosis') : 0
-        ].filter(imp => imp);
+    const mpImpairments = [
+        mpFlexion && lookupDTImpairment(parseFloat(mpFlexion), 'MP', 'flexion'),
+        mpExtension && lookupDTImpairment(parseFloat(mpExtension), 'MP', 'extension'),
+        mpAnkylosis && lookupDTImpairment(parseFloat(mpAnkylosis), 'MP', 'ankylosis')
+    ].filter(imp => imp);
 
-        const pipImpairments = [
-            pipFlexion ? lookupDTImpairment(parseFloat(pipFlexion), 'PIP', 'flexion') : 0,
-            pipExtension ? lookupDTImpairment(parseFloat(pipExtension), 'PIP', 'extension') : 0,
-            pipAnkylosis ? lookupDTImpairment(parseFloat(pipAnkylosis), 'PIP', 'ankylosis') : 0
-        ].filter(imp => imp);
+    const dipImpairment = addImpairments(dipImpairments);
+    const pipImpairment = addImpairments(pipImpairments);
+    const mpImpairment = addImpairments(mpImpairments);
 
-        const mpImpairments = [
-            mpFlexion ? lookupDTImpairment(parseFloat(mpFlexion), 'MP', 'flexion') : 0,
-            mpExtension ? lookupDTImpairment(parseFloat(mpExtension), 'MP', 'extension') : 0,
-            mpAnkylosis ? lookupDTImpairment(parseFloat(mpAnkylosis), 'MP', 'ankylosis') : 0
-        ].filter(imp => imp);
+    const totalImpairments = [pipImpairment, mpImpairment, dipImpairment].sort((a, b) => b - a); // Sort from highest to lowest
+    const { combined: totalImpairment, combinedSteps } = combineImpairments(totalImpairments);
 
-        console.log(`Impairments: DIP: ${dipImpairments}, PIP: ${pipImpairments}, MP: ${mpImpairments}`);
+    document.getElementById('DIPFlexionImpairment').textContent = dipImpairments[0] !== undefined ? dipImpairments[0] : 0;
+    document.getElementById('DIPExtensionImpairment').textContent = dipImpairments[1] !== undefined ? dipImpairments[1] : 0;
+    document.getElementById('DIPAnkylosisImpairment').textContent = dipImpairments[2] !== undefined ? dipImpairments[2] : 0;
+    document.getElementById('DIPTotalImpairment').textContent = dipImpairment;
 
-        const dipImpairment = addImpairments(dipImpairments);
-        const pipImpairment = addImpairments(pipImpairments);
-        const mpImpairment = addImpairments(mpImpairments);
+    document.getElementById('PIPFlexionImpairment').textContent = pipImpairments[0] !== undefined ? pipImpairments[0] : 0;
+    document.getElementById('PIPExtensionImpairment').textContent = pipImpairments[1] !== undefined ? pipImpairments[1] : 0;
+    document.getElementById('PIPAnkylosisImpairment').textContent = pipImpairments[2] !== undefined ? pipImpairments[2] : 0;
+    document.getElementById('PIPTotalImpairment').textContent = pipImpairment;
 
-        const totalImpairments = [pipImpairment, mpImpairment, dipImpairment].sort((a, b) => b - a); // Sort from highest to lowest
-        const { combined: totalImpairment, combinedSteps } = combineImpairments(totalImpairments);
+    document.getElementById('MPFlexionImpairment').textContent = mpImpairments[0] !== undefined ? mpImpairments[0] : 0;
+    document.getElementById('MPExtensionImpairment').textContent = mpImpairments[1] !== undefined ? mpImpairments[1] : 0;
+    document.getElementById('MPAnkylosisImpairment').textContent = mpImpairments[2] !== undefined ? mpImpairments[2] : 0;
+    document.getElementById('MPTotalImpairment').textContent = mpImpairment;
 
-        console.log(`Total Impairments: ${totalImpairments}`);
-        console.log(`Combined Impairment: ${totalImpairment}`);
+    const combinedStepsText = combinedSteps.map(step => `${step} C`).join(' ').slice(0, -1);
 
-        document.getElementById('DIPFlexionImpairment').textContent = dipImpairments[0] !== undefined ? dipImpairments[0] : 0;
-        document.getElementById('DIPExtensionImpairment').textContent = dipImpairments[1] !== undefined ? dipImpairments[1] : 0;
-        document.getElementById('DIPAnkylosisImpairment').textContent = dipImpairments[2] !== undefined ? dipImpairments[2] : 0;
-        document.getElementById('DIPTotalImpairment').textContent = dipImpairment;
-
-        document.getElementById('PIPFlexionImpairment').textContent = pipImpairments[0] !== undefined ? pipImpairments[0] : 0;
-        document.getElementById('PIPExtensionImpairment').textContent = pipImpairments[1] !== undefined ? pipImpairments[1] : 0;
-        document.getElementById('PIPAnkylosisImpairment').textContent = pipImpairments[2] !== undefined ? pipImpairments[2] : 0;
-        document.getElementById('PIPTotalImpairment').textContent = pipImpairment;
-
-        document.getElementById('MPFlexionImpairment').textContent = mpImpairments[0] !== undefined ? mpImpairments[0] : 0;
-        document.getElementById('MPExtensionImpairment').textContent = mpImpairments[1] !== undefined ? mpImpairments[1] : 0;
-        document.getElementById('MPAnkylosisImpairment').textContent = mpImpairments[2] !== undefined ? mpImpairments[2] : 0;
-        document.getElementById('MPTotalImpairment').textContent = mpImpairment;
-
-        const combinedStepsText = combinedSteps.map(step => `${step} C`).join(' ').slice(0, -1);
-
-        console.log(`Combined Steps Text: ${combinedStepsText}`);
-        console.log(`Total Impairment: ${totalImpairment}`);
-
-        document.getElementById('result').innerHTML = `
-            <p>Combined Impairment: ${combinedStepsText} = ${totalImpairment} DT</p>
-        `;
-    } catch (error) {
-        console.error('Error calculating impairment:', error);
-        alert('Error calculating impairment: ' + error.message);
-    }
+    document.getElementById('result').innerHTML = `
+        <p>Combined Impairment: ${combinedStepsText} = ${totalImpairment} DT</p>
+    `;
 });
