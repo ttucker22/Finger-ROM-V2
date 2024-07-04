@@ -457,6 +457,9 @@ document.getElementById('calculatorForm').addEventListener('submit', function(ev
         const totalImpairments = [pipImpairment, mpImpairment, dipImpairment].sort((a, b) => b - a); // Sort from highest to lowest
         const { combined: totalImpairment, combinedSteps } = combineImpairments(totalImpairments);
 
+        console.log(`Total Impairments: ${totalImpairments}`);
+        console.log(`Combined Impairment: ${totalImpairment}`);
+
         document.getElementById('DIPFlexionImpairment').textContent = dipImpairments[0] !== undefined ? dipImpairments[0] : 0;
         document.getElementById('DIPExtensionImpairment').textContent = dipImpairments[1] !== undefined ? dipImpairments[1] : 0;
         document.getElementById('DIPAnkylosisImpairment').textContent = dipImpairments[2] !== undefined ? dipImpairments[2] : 0;
