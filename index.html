@@ -76,6 +76,7 @@
                     <th>Flexion</th>
                     <th>Extension</th>
                     <th>Ankylosis</th>
+                    <th>Total Joint Impairment</th>
                 </tr>
             </thead>
             <tbody>
@@ -84,18 +85,39 @@
                     <td><input type="number" id="DIPFlexion" name="DIPFlexion"></td>
                     <td><input type="number" id="DIPExtension" name="DIPExtension"></td>
                     <td><input type="number" id="DIPAnkylosis" name="DIPAnkylosis"></td>
+                    <td rowspan="2" id="DIPTotalImpairment"></td>
+                </tr>
+                <tr>
+                    <td>Impairment</td>
+                    <td id="DIPFlexionImpairment">0</td>
+                    <td id="DIPExtensionImpairment">0</td>
+                    <td id="DIPAnkylosisImpairment">0</td>
                 </tr>
                 <tr>
                     <td>PIP</td>
                     <td><input type="number" id="PIPFlexion" name="PIPFlexion"></td>
                     <td><input type="number" id="PIPExtension" name="PIPExtension"></td>
                     <td><input type="number" id="PIPAnkylosis" name="PIPAnkylosis"></td>
+                    <td rowspan="2" id="PIPTotalImpairment"></td>
+                </tr>
+                <tr>
+                    <td>Impairment</td>
+                    <td id="PIPFlexionImpairment">0</td>
+                    <td id="PIPExtensionImpairment">0</td>
+                    <td id="PIPAnkylosisImpairment">0</td>
                 </tr>
                 <tr>
                     <td>MP</td>
                     <td><input type="number" id="MPFlexion" name="MPFlexion"></td>
                     <td><input type="number" id="MPExtension" name="MPExtension"></td>
                     <td><input type="number" id="MPAnkylosis" name="MPAnkylosis"></td>
+                    <td rowspan="2" id="MPTotalImpairment"></td>
+                </tr>
+                <tr>
+                    <td>Impairment</td>
+                    <td id="MPFlexionImpairment">0</td>
+                    <td id="MPExtensionImpairment">0</td>
+                    <td id="MPAnkylosisImpairment">0</td>
                 </tr>
             </tbody>
         </table>
