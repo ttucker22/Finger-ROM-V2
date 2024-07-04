@@ -442,6 +442,21 @@ document.getElementById('calculatorForm').addEventListener('submit', function(ev
     const totalImpairments = [pipImpairment, mpImpairment, dipImpairment].sort((a, b) => b - a); // Sort from highest to lowest
     const totalImpairment = combineImpairments(totalImpairments);
 
+    document.getElementById('DIPFlexionImpairment').textContent = dipImpairments[0] !== undefined ? dipImpairments[0] : 0;
+    document.getElementById('DIPExtensionImpairment').textContent = dipImpairments[1] !== undefined ? dipImpairments[1] : 0;
+    document.getElementById('DIPAnkylosisImpairment').textContent = dipImpairments[2] !== undefined ? dipImpairments[2] : 0;
+    document.getElementById('DIPTotalImpairment').textContent = dipImpairment;
+
+    document.getElementById('PIPFlexionImpairment').textContent = pipImpairments[0] !== undefined ? pipImpairments[0] : 0;
+    document.getElementById('PIPExtensionImpairment').textContent = pipImpairments[1] !== undefined ? pipImpairments[1] : 0;
+    document.getElementById('PIPAnkylosisImpairment').textContent = pipImpairments[2] !== undefined ? pipImpairments[2] : 0;
+    document.getElementById('PIPTotalImpairment').textContent = pipImpairment;
+
+    document.getElementById('MPFlexionImpairment').textContent = mpImpairments[0] !== undefined ? mpImpairments[0] : 0;
+    document.getElementById('MPExtensionImpairment').textContent = mpImpairments[1] !== undefined ? mpImpairments[1] : 0;
+    document.getElementById('MPAnkylosisImpairment').textContent = mpImpairments[2] !== undefined ? mpImpairments[2] : 0;
+    document.getElementById('MPTotalImpairment').textContent = mpImpairment;
+
     document.getElementById('result').innerHTML = `
         <table>
             <thead>
