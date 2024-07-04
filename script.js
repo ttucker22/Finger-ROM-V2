@@ -394,10 +394,7 @@ function lookupDTImpairment(angle, jointType, motionType) {
 }
 
 function combineImpairments(impairments) {
-    let combined = 0;
-    impairments.forEach(imp => {
-        combined = combined + imp * (1 - combined);
-    });
+    let combined = impairments.reduce((acc, imp) => acc + (imp / 100) * (1 - acc), 0);
     return Math.round(combined * 100); // Convert to percentage and round to nearest whole number
 }
 
@@ -413,25 +410,29 @@ document.getElementById('calculatorForm').addEventListener('submit', function(ev
     const mpExtension = parseFloat(document.getElementById('MPExtension').value) || 0;
     const mpAnkylosis = parseFloat(document.getElementById('MPAnkylosis').value) || 0;
 
-    const dipImpairment = combineImpairments([
+    const dipImpairments = [
         lookupDTImpairment(dipFlexion, 'DIP', 'flexion'),
         lookupDTImpairment(dipExtension, 'DIP', 'extension'),
         lookupDTImpairment(dipAnkylosis, 'DIP', 'ankylosis')
-    ]);
+    ].filter(imp => imp > 0);
 
-    const pipImpairment = combineImpairments([
+    const pipImpairments = [
         lookupDTImpairment(pipFlexion, 'PIP', 'flexion'),
         lookupDTImpairment(pipExtension, 'PIP', 'extension'),
         lookupDTImpairment(pipAnkylosis, 'PIP', 'ankylosis')
-    ]);
+    ].filter(imp => imp > 0);
 
-    const mpImpairment = combineImpairments([
+    const mpImpairments = [
         lookupDTImpairment(mpFlexion, 'MP', 'flexion'),
         lookupDTImpairment(mpExtension, 'MP', 'extension'),
         lookupDTImpairment(mpAnkylosis, 'MP', 'ankylosis')
-    ]);
+    ].filter(imp => imp > 0);
 
-    const totalImpairment = combineImpairments([dipImpairment / 100, pipImpairment / 100, mpImpairment / 100]);
+    const dipImpairment = combineImpairments(dipImpairments);
+    const pipImpairment = combineImpairments(pipImpairments);
+    const mpImpairment = combineImpairments(mpImpairments);
+
+    const totalImpairment = combineImpairments([dipImpairment, pipImpairment, mpImpairment]);
 
     document.getElementById('result').textContent = `
         DIP Impairment: ${dipImpairment}% 
