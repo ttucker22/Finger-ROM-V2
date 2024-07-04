@@ -394,7 +394,10 @@ function lookupDTImpairment(angle, jointType, motionType) {
 }
 
 function combineImpairments(impairments) {
-    let combined = impairments.reduce((acc, imp) => acc + (imp / 100) * (1 - acc), 0);
+    let combined = 0;
+    impairments.forEach(imp => {
+        combined = Math.round((combined + (imp / 100) * (1 - combined)) * 100) / 100;
+    });
     return Math.round(combined * 100); // Convert to percentage and round to nearest whole number
 }
 
@@ -436,7 +439,7 @@ document.getElementById('calculatorForm').addEventListener('submit', function(ev
     const pipImpairment = addImpairments(pipImpairments);
     const mpImpairment = addImpairments(mpImpairments);
 
-    const totalImpairments = [dipImpairment, pipImpairment, mpImpairment].sort((a, b) => b - a); // Sort from highest to lowest
+    const totalImpairments = [pipImpairment, mpImpairment, dipImpairment].sort((a, b) => b - a); // Sort from highest to lowest
     const totalImpairment = combineImpairments(totalImpairments);
 
     document.getElementById('result').textContent = `
