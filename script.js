@@ -359,6 +359,7 @@ const MPData = [
     { flexion: '>90', dtFlexion: 0, extension: '>20', dtExtension: 0, ankylosis: '>90', dtAnkylosis: 100 }
 ];
 
+
 function lookupDTImpairment(angle, jointType, motionType) {
     let data;
     if (jointType === 'DIP') {
@@ -398,6 +399,10 @@ function combineImpairments(impairments) {
     return Math.round(combined * 100); // Convert to percentage and round to nearest whole number
 }
 
+function addImpairments(impairments) {
+    return impairments.reduce((acc, imp) => acc + imp, 0);
+}
+
 document.getElementById('calculatorForm').addEventListener('submit', function(event) {
     event.preventDefault();
     const dipFlexion = document.getElementById('DIPFlexion').value;
@@ -428,9 +433,9 @@ document.getElementById('calculatorForm').addEventListener('submit', function(ev
         mpAnkylosis && lookupDTImpairment(parseFloat(mpAnkylosis), 'MP', 'ankylosis')
     ].filter(imp => imp);
 
-    const dipImpairment = combineImpairments(dipImpairments);
-    const pipImpairment = combineImpairments(pipImpairments);
-    const mpImpairment = combineImpairments(mpImpairments);
+    const dipImpairment = addImpairments(dipImpairments);
+    const pipImpairment = addImpairments(pipImpairments);
+    const mpImpairment = addImpairments(mpImpairments);
 
     const totalImpairment = combineImpairments([dipImpairment, pipImpairment, mpImpairment]);
 
