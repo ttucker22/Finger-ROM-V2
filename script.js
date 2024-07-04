@@ -422,21 +422,21 @@ document.getElementById('calculatorForm').addEventListener('submit', function(ev
         const mpAnkylosis = document.getElementById('MPAnkylosis').value;
 
         const dipImpairments = [
-            dipFlexion && lookupDTImpairment(parseFloat(dipFlexion), 'DIP', 'flexion'),
-            dipExtension && lookupDTImpairment(parseFloat(dipExtension), 'DIP', 'extension'),
-            dipAnkylosis && lookupDTImpairment(parseFloat(dipAnkylosis), 'DIP', 'ankylosis')
+            dipFlexion ? lookupDTImpairment(parseFloat(dipFlexion), 'DIP', 'flexion') : 0,
+            dipExtension ? lookupDTImpairment(parseFloat(dipExtension), 'DIP', 'extension') : 0,
+            dipAnkylosis ? lookupDTImpairment(parseFloat(dipAnkylosis), 'DIP', 'ankylosis') : 0
         ].filter(imp => imp);
 
         const pipImpairments = [
-            pipFlexion && lookupDTImpairment(parseFloat(pipFlexion), 'PIP', 'flexion'),
-            pipExtension && lookupDTImpairment(parseFloat(pipExtension), 'PIP', 'extension'),
-            pipAnkylosis && lookupDTImpairment(parseFloat(pipAnkylosis), 'PIP', 'ankylosis')
+            pipFlexion ? lookupDTImpairment(parseFloat(pipFlexion), 'PIP', 'flexion') : 0,
+            pipExtension ? lookupDTImpairment(parseFloat(pipExtension), 'PIP', 'extension') : 0,
+            pipAnkylosis ? lookupDTImpairment(parseFloat(pipAnkylosis), 'PIP', 'ankylosis') : 0
         ].filter(imp => imp);
 
         const mpImpairments = [
-            mpFlexion && lookupDTImpairment(parseFloat(mpFlexion), 'MP', 'flexion'),
-            mpExtension && lookupDTImpairment(parseFloat(mpExtension), 'MP', 'extension'),
-            mpAnkylosis && lookupDTImpairment(parseFloat(mpAnkylosis), 'MP', 'ankylosis')
+            mpFlexion ? lookupDTImpairment(parseFloat(mpFlexion), 'MP', 'flexion') : 0,
+            mpExtension ? lookupDTImpairment(parseFloat(mpExtension), 'MP', 'extension') : 0,
+            mpAnkylosis ? lookupDTImpairment(parseFloat(mpAnkylosis), 'MP', 'ankylosis') : 0
         ].filter(imp => imp);
 
         const dipImpairment = addImpairments(dipImpairments);
